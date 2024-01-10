@@ -1,5 +1,6 @@
-FROM mysql:5.7
+FROM mysql:8.0-oracle
 
+# Set environment variables
 ENV MYSQL_ROOT_PASSWORD=123456
 ENV MYSQL_DATABASE=chat
 
