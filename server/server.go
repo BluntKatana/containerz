@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
@@ -22,6 +24,7 @@ type Message struct {
 
 type Messages []Message
 
+// Converts a Message struct to JSON string.
 func (a Message) ToJSON() string {
 	b, err := json.Marshal(a)
 	if err != nil {
@@ -31,6 +34,7 @@ func (a Message) ToJSON() string {
 	return string(b)
 }
 
+// Converts a Messages slice to JSON string.
 func (a Messages) ToJSON() string {
 	b, err := json.Marshal(a)
 	if err != nil {
@@ -40,15 +44,41 @@ func (a Messages) ToJSON() string {
 	return string(b)
 }
 
-func getAllMessages(db *sql.DB) (Messages, error) {
+// Initializes a MySQL database connection and returns a sql.DB object.
+func InitializeDB() (*sql.DB, error) {
+	var db *sql.DB
+
+	// Capture connection properties.
+	cfg := mysql.Config{
+		User:   "root",
+		Passwd: os.Getenv("MYSQL_ROOT_PASSWORD"),
+		Net:    "tcp",
+		Addr:   "127.0.0.1:7675",
+		DBName: "chat",
+	}
+	// Get a database handle.
+	db, err := sql.Open("mysql", cfg.FormatDSN())
+	pingErr := db.Ping()
+	if pingErr != nil || err != nil {
+		return nil, fmt.Errorf("Could not establish a connection to MySQL database at %s", cfg.Addr)
+	}
+	fmt.Println("Connected!")
+
+	return db, nil
+}
+
+// Retrieves all messages from the database and returns a Messages slice.
+func GetAllMessages(db *sql.DB) (Messages, error) {
 	// An messages slice to hold data from returned rows.
 	var messages Messages
 
+	// Retrieve message data from database.
 	rows, err := db.Query("SELECT * FROM messages ORDER BY created_at DESC")
 	if err != nil {
 		return nil, fmt.Errorf("getAllMessages %v", err)
 	}
 	defer rows.Close()
+
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
 		var message Message
@@ -65,47 +95,50 @@ func getAllMessages(db *sql.DB) (Messages, error) {
 	return messages, nil
 }
 
+// Retrieves a message by id from the database and returns a Message struct.
+func GetMessageById(db *sql.DB, id int) (Message, error) {
+	var message Message
+
+	row := db.QueryRow("SELECT * FROM messages WHERE id = ?", id)
+
+	if err := row.Scan(&message.ID, &message.Username, &message.Content, &message.Likes, &message.Ys, &message.CreatedAt); err != nil {
+		return message, fmt.Errorf("GetMessageById %v", err)
+	}
+
+	return message, nil
+}
+
 func main() {
-	var db *sql.DB
 
-	// Capture connection properties.
-	cfg := mysql.Config{
-		User:   "root",
-		Passwd: "123456",
-		Net:    "tcp",
-		Addr:   "127.0.0.1:7675",
-		DBName: "chat",
-	}
-	// Get a database handle.
-	db, err := sql.Open("mysql", cfg.FormatDSN())
+	// Initialize database connection.
+	db, err := InitializeDB()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-	fmt.Println("Connected!")
-
-	messages, err := getAllMessages(db)
-	if err != nil {
-		log.Fatal(err)
-	}
+	defer db.Close()
 
 	e := echo.New()
-	e.GET("/messages/all", func(c echo.Context) error {
+
+	// All messages
+	e.GET("/messages", func(c echo.Context) error {
+		messages, err := GetAllMessages(db)
+		if err != nil {
+			log.Fatal(err)
+		}
 		return c.String(http.StatusOK, messages.ToJSON())
 	})
 
+	// Message by id
 	e.GET("/messages/:id", func(c echo.Context) error {
-		id := c.Param("id")
-		for _, message := range messages {
-			if id == fmt.Sprintf("%d", message.ID) {
-				return c.String(http.StatusOK, message.ToJSON())
-			}
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return c.String(http.StatusOK, "[]")
 		}
-		return c.String(http.StatusOK, "[]")
+		message, err := GetMessageById(db, id)
+		if err != nil {
+			c.String(http.StatusOK, "[]")
+		}
+		return c.String(http.StatusOK, message.ToJSON())
 	})
 	e.Logger.Fatal(e.Start(":1323"))
 }

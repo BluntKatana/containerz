@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS messages (
 INSERT INTO messages (username, content, likes, ys)
 VALUES
     ('admin', 'Welcome to the chat!', 0, 0),
-    ('jack', 'just setting up my y', 12, 1)
+    ('jack', 'just setting up my y', 12, 1),
+    ('elon', 'why is no one using x anymore?', 212, 349)
 ;
