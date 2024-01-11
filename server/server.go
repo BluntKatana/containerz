@@ -102,6 +102,32 @@ func main() {
 		return c.JSON(http.StatusCreated, &message)
 	})
 
+	e.PUT("/messages/:id/y", func(c echo.Context) error {
+		// Convert id param to int
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return c.String(http.StatusOK, "Invalid id")
+		}
+		// Retrieve message by id
+		message, err := db.GetMessageById(database, id)
+
+		if err != nil {
+			fmt.Println("err", err)
+			// return not found error
+			return c.JSON(http.StatusOK, db.Message{})
+		}
+
+		message.Ys = message.Ys + 1
+
+		// Update message in database
+		message, err = db.UpdateMessage(database, message)
+		if err != nil {
+			return err
+		}
+		// Return success response
+		return c.JSON(http.StatusCreated, &message)
+	})
+
 	// Initialize router
 	e.Logger.Fatal(e.Start(":1323"))
 }
