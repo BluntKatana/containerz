@@ -190,16 +190,21 @@
   />
 
   <!-- Button to post the message -->
-  <Button
-    type="submit"
-    on:click={post}
-    disabled={content.length === 0 || !username || buttonLoading}
-    class="max-w-36 w-full ml-auto"
-  >
-    <!-- If the button is loading, we show a spinning icon. -->
-    {#if buttonLoading}
-      <Reload class="mr-2 h-4 w-4 animate-spin" />
-    {/if}
-    Plaatsen
-  </Button>
+  <div class="flex items-end justify-between">
+    <span class="text-sm text-gray-500">
+      {content.length}/255
+    </span>
+    <Button
+      type="submit"
+      on:click={post}
+      disabled={content.length === 0 || !username || buttonLoading}
+      class="min-w-24"
+    >
+      <!-- If the button is loading, we show a spinning icon. -->
+      {#if buttonLoading}
+        <Reload class="mr-2 h-4 w-4 animate-spin" />
+      {/if}
+      Post
+    </Button>
+  </div>
 </Card.Root>

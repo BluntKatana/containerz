@@ -80,27 +80,28 @@
   </div>
 
   <!-- Message content -->
-  <Card.Content>
-    {message.content}
+  <Card.Content class="space-y-1">
+    <span>
+      {message.content}
+    </span>
+    <!-- Footer of the card, containing buttons to (un)like or y the post. -->
+    <div class="flex gap-4">
+      <!-- Like/Unlike button, also showing the count -->
+      <button on:click={like} class="flex gap-1 items-center">
+        {#if liked}
+          <HeartFilled />
+        {:else}
+          <Heart />
+        {/if}
+
+        {likeCount}
+      </button>
+
+      <!-- Y button, also showing the count. -->
+      <button class="flex gap-1 items-center" on:click={y}>
+        <div>𝕐</div>
+        {yCount}
+      </button>
+    </div>
   </Card.Content>
-
-  <!-- Footer of the card, containing buttons to (un)like or y the post. -->
-  <div class="flex gap-4">
-    <!-- Like/Unlike button, also showing the count -->
-    <button on:click={like} class="flex gap-1 items-center">
-      {#if liked}
-        <HeartFilled />
-      {:else}
-        <Heart />
-      {/if}
-
-      {likeCount}
-    </button>
-
-    <!-- Y button, also showing the count. -->
-    <button class="flex gap-1 items-center" on:click={y}
-      ><div>𝕐</div>
-      {yCount}</button
-    >
-  </div>
 </Card.Root>
