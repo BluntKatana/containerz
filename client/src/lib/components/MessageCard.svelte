@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import type {Message} from '../../types';
+    import type {Message} from '$lib/types';
     import * as Card from "$lib/components/ui/card";
     import { HeartFilled, Heart } from 'radix-icons-svelte';
 
@@ -16,6 +16,16 @@
         }
 
         liked = !liked;
+
+        fetch(`http://localhost:1323/messages/${message.id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                liked: liked
+            })
+        });
     }
 
     function y() {
