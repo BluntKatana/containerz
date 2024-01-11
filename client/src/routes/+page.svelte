@@ -7,7 +7,7 @@
     import Separator from "@/components/ui/separator/separator.svelte";
     import { likedPostsStore, messageStore } from "@/stores";
     import { Button } from "@/components/ui/button";
-    import { Moon, Sun } from "radix-icons-svelte";
+    import { Moon, Reload, Sun } from "radix-icons-svelte";
     import { toggleMode } from "mode-watcher";
 
     let messages: Message[] = [];
@@ -26,7 +26,7 @@
 
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        // messagesLoading = false;
+        messagesLoading = false;
         return data;
     });
 
@@ -45,8 +45,8 @@
 
 </script>
 
-<div class="flex justify-center flex-col">
-    <div class="w-full flex items-center justify-between px-4 py-2">
+<div class="flex items-center flex-col h-screen w-screen">
+    <div class="w-full flex items-center justify-between px-4 py-2 h-14">
         <span class="text-4xl">
             𝕐
         </span>
@@ -61,10 +61,13 @@
           </Button>
 
     </div>
-    <div class="max-w-[600px] w-screen flex flex-col gap-4 mx-auto">
+    <div class="max-w-[600px] w-screen flex flex-col gap-4 mx-auto flex-grow">
         <MessageForm />
         {#if messagesLoading}
-        <div class="w-full flex-grow flex items-center justify-center">Loading</div>
+        <div class="w-full flex-grow flex items-center flex-col">
+            <Reload class="mr-2 h-4 w-4 animate-spin" />
+            <span>Loading messages...</span>
+        </div>
         {:else}
             <Separator />
             <div class="flex flex-col gap-4">
