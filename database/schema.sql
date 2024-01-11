@@ -1,7 +1,8 @@
 -- initialize the database
 CREATE database IF NOT EXISTS chat;
-
 use chat;
+
+-- create the messages table
 CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255),

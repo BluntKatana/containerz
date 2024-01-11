@@ -81,6 +81,12 @@ func main() {
 		if err := c.Bind(&message); err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "invalid message data")
 		}
+
+		// Check length requirements
+		if len(message.Content) > 155 {
+			return echo.NewHTTPError(http.StatusBadRequest, "message content too long")
+		}
+
 		// Add message to database
 		message, err = db.AddMessage(database, message)
 		if err != nil {
@@ -90,6 +96,7 @@ func main() {
 		return c.JSON(http.StatusCreated, &message)
 	})
 
+	// Update a message: add a like
 	e.PUT("/messages/:id/like", func(c echo.Context) error {
 
 		// Initialize database connection.
@@ -121,6 +128,7 @@ func main() {
 		return c.JSON(http.StatusCreated, &message)
 	})
 
+	// Update a message: add a y
 	e.PUT("/messages/:id/y", func(c echo.Context) error {
 
 		// Initialize database connection.
