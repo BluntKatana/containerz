@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -85,7 +84,7 @@ func main() {
 		// Add message to database
 		message, err = db.AddMessage(database, message)
 		if err != nil {
-			return err
+			return echo.NewHTTPError(http.StatusBadRequest, "could not process request")
 		}
 		// Return success response
 		return c.JSON(http.StatusCreated, &message)
@@ -103,15 +102,12 @@ func main() {
 		// Convert id param to int
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			return c.String(http.StatusOK, "Invalid id")
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid message id (must be a number)")
 		}
 		// Retrieve message by id
 		message, err := db.GetMessageById(database, id)
-
 		if err != nil {
-			fmt.Println("err", err)
-			// return not found error
-			return c.JSON(http.StatusOK, db.Message{})
+			return echo.NewHTTPError(http.StatusNotFound, "message not found")
 		}
 
 		message.Likes = message.Likes + 1
@@ -119,7 +115,7 @@ func main() {
 		// Update message in database
 		message, err = db.UpdateMessage(database, message)
 		if err != nil {
-			return err
+			return echo.NewHTTPError(http.StatusBadRequest, "could not process request")
 		}
 		// Return success response
 		return c.JSON(http.StatusCreated, &message)
@@ -137,15 +133,12 @@ func main() {
 		// Convert id param to int
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			return c.String(http.StatusOK, "Invalid id")
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid message id (must be a number)")
 		}
 		// Retrieve message by id
 		message, err := db.GetMessageById(database, id)
-
 		if err != nil {
-			fmt.Println("err", err)
-			// return not found error
-			return c.JSON(http.StatusOK, db.Message{})
+			return echo.NewHTTPError(http.StatusNotFound, "message not found")
 		}
 
 		message.Ys = message.Ys + 1
