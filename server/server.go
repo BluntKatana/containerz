@@ -59,6 +59,11 @@ func createMessage(c echo.Context) error {
 	if err := c.Bind(&message); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid message data")
 	}
+	// Ensure message content is no longer than 255 characters
+	if len(message.Content) > 255 {
+		return echo.NewHTTPError(http.StatusBadRequest, "message content must be less than 255 characters")
+	}
+
 	// Add message to database
 	message, err = db.AddMessage(database, message)
 	if err != nil {
