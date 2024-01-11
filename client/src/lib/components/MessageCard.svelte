@@ -2,6 +2,7 @@
     import type {Message} from '$lib/types';
     import * as Card from "$lib/components/ui/card";
     import { HeartFilled, Heart } from 'radix-icons-svelte';
+    import { PUBLIC_API_URL } from '$env/static/public';
 
     export let message: Message;
 
@@ -15,21 +16,19 @@
             likeCount++;
         }
 
-        liked = !liked;
+        fetch(`${PUBLIC_API_URL}/messages/${message.id}/${liked ? 'unlike' : 'like'}`, {
+            method: 'PUT',
+        })
 
-        fetch(`http://localhost:1323/messages/${message.id}/like`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                liked: liked
-            })
-        });
+        liked = !liked;
     }
 
     function y() {
         yCount++;
+
+        fetch(`${PUBLIC_API_URL}/messages/${message.id}/y`, {
+            method: 'PUT',
+        })
 
         yed = !yed;
     }
@@ -38,7 +37,7 @@
     let yCount = message.ys;
 </script>
 
-<Card.Root class='p-4'>
+<Card.Root>
     <div class="flex justify-between">
         <Card.Title>{message.username}</Card.Title>
         <Card.Description>{new Date(message.created_at).toLocaleString('nl-NL', {

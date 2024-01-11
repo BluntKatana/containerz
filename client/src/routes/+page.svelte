@@ -3,6 +3,8 @@
     import type { Message } from "$lib/types";
     import MessageCard from "$lib/components/MessageCard.svelte";
     import { PUBLIC_API_URL } from '$env/static/public';
+    import MessageForm from "@/components/MessageForm.svelte";
+    import Separator from "@/components/ui/separator/separator.svelte";
 
     let promise: Promise<Message[]>;
 
@@ -25,9 +27,13 @@
 </script>
 
 <div class="flex justify-center">
-        <div class="max-w-[600px] w-screen flex flex-col gap-4">
+    <div class="max-w-[600px] w-screen flex flex-col gap-4">
+            <MessageForm />
+            <Separator />
+            <div class="flex flex-col gap-4">
             {#each messages as message (message.id)}
                 <MessageCard {message} />
             {/each}
+        </div>
         </div>
 </div>
