@@ -36,12 +36,12 @@ func InitializeDB() (*sql.DB, error) {
 }
 
 type Message struct {
-	ID        int64
-	Username  string
-	Content   string
-	Likes     int64
-	Ys        int64
-	CreatedAt string
+	ID        int64  `json:"id"`
+	Username  string `json:"username"`
+	Content   string `json:"content"`
+	Likes     int64  `json:"likes"`
+	Ys        int64  `json:"ys"`
+	CreatedAt string `json:"created_at"`
 }
 
 type Messages []Message
@@ -87,6 +87,25 @@ func GetMessageById(db *sql.DB, id int) (Message, error) {
 	return message, nil
 }
 
+// Add a message to the database and return the message struct
+func AddMessage(db *sql.DB, message Message) (Message, error) {
+	stmt, err := db.Prepare("INSERT INTO messages (username, content, likes, ys) VALUES (?, ?, ?, ?)")
+	if err != nil {
+		return message, err
+	}
+	res, err := stmt.Exec(message.Username, message.Content, message.Likes, message.Likes)
+	if err != nil {
+		return message, err
+	}
+	// Return success response
+	id, err := res.LastInsertId()
+	if err != nil {
+		return message, err
+	}
+	message.ID = id
+	return message, nil
+}
+
 func main() {
 	// Initialize database connection.
 	db, err := InitializeDB()
@@ -99,8 +118,8 @@ func main() {
 	e := echo.New()
 
 	// Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	// e.Use(middleware.Logger())
+	// e.Use(middleware.Recover())
 
 	// https://echo.labstack.com/docs/middleware/cors
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -131,6 +150,23 @@ func main() {
 			c.JSON(http.StatusOK, Message{})
 		}
 		return c.JSON(http.StatusOK, message)
+	})
+
+	// Add a message
+	e.POST("/messages", func(c echo.Context) error {
+		// example body: { "username": "test", "content": "test", "likes": 0, "ys": 0 }
+		// Bind message data from request body to Message struct
+		var message Message
+		if err := c.Bind(&message); err != nil {
+			return err
+		}
+		// Add message to database
+		message, err = AddMessage(db, message)
+		if err != nil {
+			return err
+		}
+		// Return success response
+		return c.JSON(http.StatusCreated, &message)
 	})
 
 	// Initialize router
