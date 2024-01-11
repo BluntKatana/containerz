@@ -76,9 +76,35 @@ func main() {
 		return c.JSON(http.StatusCreated, &message)
 	})
 
+	e.PUT("/messages/:id/like", func(c echo.Context) error {
+		// Convert id param to int
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return c.String(http.StatusOK, "Invalid id")
+		}
+		// Retrieve message by id
+		message, err := db.GetMessageById(database, id)
+
+		if err != nil {
+			fmt.Println("err", err)
+			// return not found error
+			return c.JSON(http.StatusOK, db.Message{})
+		}
+
+		message.Likes = message.Likes + 1
+
+		// Update message in database
+		message, err = db.UpdateMessage(database, message)
+		if err != nil {
+			return err
+		}
+		// Return success response
+		return c.JSON(http.StatusCreated, &message)
+	})
+
 	// Update a message its likes, ys, and/or content
 	e.PUT("/messages/:id", func(c echo.Context) error {
-		// example body: { "username": "test", "content": "test", "likes": 0, "ys": 0 }
+		// example body: { "content": "test", "likes": 0, "ys": 0 }
 		// Bind message data from request body to Message struct
 		// Convert id param to int
 		id, err := strconv.Atoi(c.Param("id"))
@@ -119,8 +145,6 @@ func main() {
 		if content != "" {
 			message.Content = content
 		}
-
-		fmt.Println("FORM", likes, ys, content)
 
 		// Update message in database
 		message, err = db.UpdateMessage(database, message)
