@@ -3,14 +3,19 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/go-sql-driver/mysql"
 )
 
-// Initializes a MySQL database connection and returns a sql.DB object.
-func InitializeDB() (*sql.DB, error) {
-	var db *sql.DB
+// Information about the database connection.
+// https://go.dev/doc/database/open-handle
 
+// A sql.DB object manages a pool of database connections.
+var database *sql.DB
+
+// Initializes a MySQL database connection and returns a sql.DB object.
+func init() {
 	// Capture connection properties.
 	cfg := mysql.Config{
 		User:   "root",
@@ -20,12 +25,27 @@ func InitializeDB() (*sql.DB, error) {
 		DBName: "chat",
 	}
 	// Get a database handle.
-	db, err := sql.Open("mysql", cfg.FormatDSN())
-	pingErr := db.Ping()
-	if pingErr != nil || err != nil {
-		return nil, fmt.Errorf("could not establish a connection to MySQL database at %s", cfg.Addr)
+	sqlDB, err := sql.Open("mysql", cfg.FormatDSN())
+	if err != nil {
+		log.Fatal(err)
 	}
-	fmt.Println("Connected!")
 
-	return db, nil
+	database = sqlDB
+
+	// Set maximum number of connections.
+	// database.SetMaxOpenConns(20)
+
+	// Verify connection properties.
+	if err := database.Ping(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Init - Successfully connected!")
+}
+
+func Ping() error {
+	if err := database.Ping(); err != nil {
+		return err
+	}
+	fmt.Println("Ping - Successfully connected!")
+	return nil
 }

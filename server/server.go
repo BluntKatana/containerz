@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
+	"db"
 	"handler"
 )
 
@@ -31,4 +32,6 @@ func main() {
 
 	// Service start at port :1323
 	e.Logger.Fatal(e.Start(":1323"))
+
+	db.Ping()
 }

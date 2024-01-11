@@ -34,14 +34,12 @@ func GetMessage(c echo.Context) error {
 }
 
 func CreateMessage(c echo.Context) error {
-	fmt.Println("CreateMessage")
 	// Bind message data from request body to Message struct
 	var objRequest db.Message
 	if err := c.Bind(&objRequest); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "CRASH")
 	}
 
-	fmt.Println(objRequest)
 	// Ensure message content is no longer than 255 characters
 	if len(objRequest.Content) > 255 {
 		return echo.NewHTTPError(http.StatusBadRequest, "message content must be less than 255 characters")
