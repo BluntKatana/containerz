@@ -5,7 +5,6 @@
   import { onMount } from 'svelte';
   import { likedPostsStore } from '@/stores';
   import { get } from 'svelte/store';
-  import Separator from './ui/separator/separator.svelte';
   import type { Message } from '@/types';
 
   export let message: Message;
