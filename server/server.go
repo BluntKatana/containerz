@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,38 +9,8 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
-
-type Message struct {
-	ID        int64
-	Username  string
-	Content   string
-	Likes     int64
-	Ys        int64
-	CreatedAt string
-}
-
-type Messages []Message
-
-// Converts a Message struct to JSON string.
-func (a Message) ToJSON() string {
-	b, err := json.Marshal(a)
-	if err != nil {
-		fmt.Println(err)
-		return "{}"
-	}
-	return string(b)
-}
-
-// Converts a Messages slice to JSON string.
-func (a Messages) ToJSON() string {
-	b, err := json.Marshal(a)
-	if err != nil {
-		fmt.Println(err)
-		return "[]"
-	}
-	return string(b)
-}
 
 // Initializes a MySQL database connection and returns a sql.DB object.
 func InitializeDB() (*sql.DB, error) {
@@ -59,12 +28,23 @@ func InitializeDB() (*sql.DB, error) {
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 	pingErr := db.Ping()
 	if pingErr != nil || err != nil {
-		return nil, fmt.Errorf("Could not establish a connection to MySQL database at %s", cfg.Addr)
+		return nil, fmt.Errorf("could not establish a connection to MySQL database at %s", cfg.Addr)
 	}
 	fmt.Println("Connected!")
 
 	return db, nil
 }
+
+type Message struct {
+	ID        int64
+	Username  string
+	Content   string
+	Likes     int64
+	Ys        int64
+	CreatedAt string
+}
+
+type Messages []Message
 
 // Retrieves all messages from the database and returns a Messages slice.
 func GetAllMessages(db *sql.DB) (Messages, error) {
@@ -108,7 +88,6 @@ func GetMessageById(db *sql.DB, id int) (Message, error) {
 }
 
 func main() {
-
 	// Initialize database connection.
 	db, err := InitializeDB()
 	if err != nil {
@@ -116,28 +95,44 @@ func main() {
 	}
 	defer db.Close()
 
+	// Echo instance
 	e := echo.New()
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// https://echo.labstack.com/docs/middleware/cors
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	}))
 
 	// All messages
 	e.GET("/messages", func(c echo.Context) error {
 		messages, err := GetAllMessages(db)
+
 		if err != nil {
-			log.Fatal(err)
+			return c.JSON(http.StatusOK, Messages{})
 		}
-		return c.String(http.StatusOK, messages.ToJSON())
+		return c.JSON(http.StatusOK, messages)
 	})
 
 	// Message by id
 	e.GET("/messages/:id", func(c echo.Context) error {
+		// Convert id param to int
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
-			return c.String(http.StatusOK, "[]")
+			return c.String(http.StatusOK, "Invalid id")
 		}
+		// Retrieve message by id
 		message, err := GetMessageById(db, id)
 		if err != nil {
-			c.String(http.StatusOK, "[]")
+			c.JSON(http.StatusOK, Message{})
 		}
-		return c.String(http.StatusOK, message.ToJSON())
+		return c.JSON(http.StatusOK, message)
 	})
+
+	// Initialize router
 	e.Logger.Fatal(e.Start(":1323"))
 }
