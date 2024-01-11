@@ -164,9 +164,18 @@
       <Skeleton class="w-32 h-[18px]" />
       <!-- If the username has loaded, render it in a card title + a button to open the change username dialog. -->
     {:else}
-      <Card.Title>
-        {username}
-      </Card.Title>
+      <div class="flex gap-2 items-center">
+        <div class="flex items-center gap-2">
+          <img
+            src={`https://picsum.photos/seed/${username}/200`}
+            alt="Avatar"
+            class="h-8 aspect-square rounded-full"
+          />
+        </div>
+        <Card.Title>
+          {username}
+        </Card.Title>
+      </div>
       <Button
         variant="ghost"
         size="icon"

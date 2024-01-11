@@ -67,7 +67,18 @@
 <Card.Root>
   <!-- Card header containing the user name and post datetime -->
   <div class="flex justify-between flex-col gap-1 sm:flex-row">
-    <Card.Title>{message.username}</Card.Title>
+    <div class="flex gap-2 items-center">
+      <div class="flex items-center gap-2">
+        <img
+          src={`https://picsum.photos/seed/${message.username}/200`}
+          alt="Avatar"
+          class="h-8 aspect-square rounded-full"
+        />
+      </div>
+      <Card.Title>
+        {message.username}
+      </Card.Title>
+    </div>
     <Card.Description
       >{new Date(`${message.created_at} GMT`).toLocaleString('en', {
         year: 'numeric',
