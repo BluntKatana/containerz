@@ -19,7 +19,7 @@ type Messages []Message
 // Retrieves all messages from the database and returns a Messages slice.
 func GetAllMessages(db *sql.DB) (Messages, error) {
 	// An messages slice to hold data from returned rows.
-	var messages Messages
+	var messages Messages = make([]Message, 0)
 
 	// Retrieve message data from database.
 	rows, err := db.Query("SELECT * FROM messages ORDER BY created_at DESC")
