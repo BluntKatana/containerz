@@ -102,59 +102,6 @@ func main() {
 		return c.JSON(http.StatusCreated, &message)
 	})
 
-	// Update a message its likes, ys, and/or content
-	e.PUT("/messages/:id", func(c echo.Context) error {
-		// example body: { "content": "test", "likes": 0, "ys": 0 }
-		// Bind message data from request body to Message struct
-		// Convert id param to int
-		id, err := strconv.Atoi(c.Param("id"))
-		if err != nil {
-			return c.String(http.StatusOK, "Invalid id")
-		}
-		// Retrieve message by id
-		message, err := db.GetMessageById(database, id)
-
-		if err != nil {
-			fmt.Println("err", err)
-			// return not found error
-			return c.JSON(http.StatusOK, db.Message{})
-		}
-
-		// Retrieve ys, likes and/or content from the request body
-		// and update the message struct if they are present
-		likes := c.FormValue("likes")
-		if likes != "" {
-			fmt.Println("likes", likes)
-			likes, err := strconv.Atoi(likes)
-			if err != nil {
-				return c.String(http.StatusOK, "Invalid likes")
-			}
-			message.Likes = int64(likes)
-		}
-
-		ys := c.FormValue("ys")
-		if ys != "" {
-			ys, err := strconv.Atoi(ys)
-			if err != nil {
-				return c.String(http.StatusOK, "Invalid ys")
-			}
-			message.Ys = int64(ys)
-		}
-
-		content := c.FormValue("content")
-		if content != "" {
-			message.Content = content
-		}
-
-		// Update message in database
-		message, err = db.UpdateMessage(database, message)
-		if err != nil {
-			return err
-		}
-		// Return success response
-		return c.JSON(http.StatusCreated, &message)
-	})
-
 	// Initialize router
 	e.Logger.Fatal(e.Start(":1323"))
 }
