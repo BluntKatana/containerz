@@ -56,7 +56,7 @@
 
 <div class="flex items-center flex-col h-screen w-screen">
   <!-- Header containing Y logo and dark/light mode toggle -->
-  <nav class="w-full flex items-center justify-between px-4 py-2 h-14">
+  <nav class="w-full flex items-center justify-between px-4 py-2">
     <span class="text-4xl">𝕐</span>
     <Button on:click={toggleMode} variant="outline" size="icon">
       <Sun
