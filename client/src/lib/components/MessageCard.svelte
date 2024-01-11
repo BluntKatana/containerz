@@ -70,7 +70,7 @@
   <div class="flex justify-between flex-col gap-1 sm:flex-row">
     <Card.Title>{message.username}</Card.Title>
     <Card.Description
-      >{new Date(message.created_at).toLocaleString('en', {
+      >{new Date(`${message.created_at} GMT`).toLocaleString('en', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
