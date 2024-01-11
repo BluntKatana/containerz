@@ -1,7 +1,8 @@
 <script lang='ts'>
     import { onMount } from "svelte";
-    import type { Message } from "./types";
-    import MessageCard from "./lib/components/MessageCard.svelte";
+    import type { Message } from "$lib/types";
+    import MessageCard from "$lib/components/MessageCard.svelte";
+    import { PUBLIC_API_URL } from '$env/static/public';
 
     let promise: Promise<Message[]>;
 
@@ -9,7 +10,7 @@
 
 
   onMount(async () => {
-    promise = await fetch("http://localhost:1323/messages", {
+    promise = await fetch(`${PUBLIC_API_URL}/messages`, {
       headers:{
       accept: 'application/json',
       'User-agent': 'learning app',
