@@ -91,7 +91,6 @@ func main() {
 	})
 
 	e.PUT("/messages/:id/like", func(c echo.Context) error {
-
 		// Initialize database connection.
 		database, err := db.InitializeDB()
 		if err != nil {
@@ -111,6 +110,36 @@ func main() {
 		}
 
 		message.Likes = message.Likes + 1
+
+		// Update message in database
+		message, err = db.UpdateMessage(database, message)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "could not process request")
+		}
+		// Return success response
+		return c.JSON(http.StatusCreated, &message)
+	})
+
+	e.PUT("/messages/:id/unlike", func(c echo.Context) error {
+		// Initialize database connection.
+		database, err := db.InitializeDB()
+		if err != nil {
+			return echo.NewHTTPError(http.StatusServiceUnavailable, "something went wrong processing your request")
+		}
+		defer database.Close()
+
+		// Convert id param to int
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "invalid message id (must be a number)")
+		}
+		// Retrieve message by id
+		message, err := db.GetMessageById(database, id)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusNotFound, "message not found")
+		}
+
+		message.Likes = message.Likes - 1
 
 		// Update message in database
 		message, err = db.UpdateMessage(database, message)
