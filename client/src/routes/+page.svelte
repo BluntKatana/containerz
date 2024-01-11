@@ -54,9 +54,9 @@
   });
 </script>
 
-<div class="flex items-center flex-col h-screen w-screen">
+<div class="flex items-center flex-col h-screen w-full">
   <!-- Header containing Y logo and dark/light mode toggle -->
-  <nav class="w-full flex items-center justify-between px-4 py-2">
+  <nav class="fixed w-full flex items-center justify-between px-4 top-4">
     <span class="text-4xl">𝕐</span>
     <Button on:click={toggleMode} variant="outline" size="icon">
       <Sun
@@ -69,7 +69,7 @@
     </Button>
   </nav>
   <!-- Main content -->
-  <main class="max-w-[600px] w-screen flex flex-col gap-4 mx-auto flex-grow">
+  <main class="max-w-[600px] w-screen flex flex-col gap-4 mx-auto flex-grow py-4">
     <MessageForm />
     <!-- Show a loading spinner when the messages are being fetched. -->
     {#if messagesLoading}
