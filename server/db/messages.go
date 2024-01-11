@@ -5,6 +5,9 @@ import (
 	"fmt"
 )
 
+// Docs: https://go.dev/doc/database/
+// - querying: https://go.dev/doc/database/querying
+
 type Message struct {
 	ID        int64  `json:"id"`
 	Username  string `json:"username"`
