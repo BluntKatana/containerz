@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/go-sql-driver/mysql"
@@ -51,7 +50,7 @@ func InitializeDB() (*sql.DB, error) {
 	// Capture connection properties.
 	cfg := mysql.Config{
 		User:   "root",
-		Passwd: os.Getenv("MYSQL_ROOT_PASSWORD"),
+		Passwd: "123456",
 		Net:    "tcp",
 		Addr:   "127.0.0.1:7675",
 		DBName: "chat",
