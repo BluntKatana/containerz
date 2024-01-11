@@ -72,8 +72,9 @@ func AddMessage(db *sql.DB, message Message) (Message, error) {
 	if err != nil {
 		return message, err
 	}
-	message.ID = id
-	return message, nil
+
+	// Grab the message from the database
+	return GetMessageById(db, int(id))
 }
 
 // Update a message its likes, ys, or content
