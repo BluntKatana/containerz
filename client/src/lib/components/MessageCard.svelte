@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Message } from '$lib/types';
   import * as Card from '$lib/components/ui/card';
   import { HeartFilled, Heart } from 'radix-icons-svelte';
   import { PUBLIC_API_URL } from '$env/static/public';
@@ -7,6 +6,7 @@
   import { likedPostsStore } from '@/stores';
   import { get } from 'svelte/store';
   import Separator from './ui/separator/separator.svelte';
+  import type { Message } from '@/types';
 
   export let message: Message;
 
