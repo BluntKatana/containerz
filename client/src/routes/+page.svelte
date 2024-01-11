@@ -5,6 +5,7 @@
     import { PUBLIC_API_URL } from '$env/static/public';
     import MessageForm from "@/components/MessageForm.svelte";
     import Separator from "@/components/ui/separator/separator.svelte";
+    import { messageStore } from "@/stores";
 
     let promise: Promise<Message[]>;
 
@@ -22,6 +23,12 @@
     .then(response=>(response.json()))
 
     messages = await promise;
+
+    messageStore.set(messages);
+
+    messageStore.subscribe((value) => {
+        messages = value;
+    })
   })
 
 </script>
