@@ -62,7 +62,7 @@ Desktop.ini
 $RECYCLE.BIN/
 
 # Svelte and Vite specific files
-/.svelte-kit
+.svelte-kit
 /package
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
