@@ -157,7 +157,7 @@
 </Dialog.Root>
 
 <!-- Form to post a new message to Y. -->
-<Card.Root class="flex flex-col gap-2 justify-end">
+<Card.Root class="flex flex-col gap-2 justify-end z-10">
   <div class="min-h-8 max-h-8 flex items-center justify-between">
     <!-- If we are busy fetching the username from localstorage, show a skeleton loading. -->
     {#if loadingUsername}
