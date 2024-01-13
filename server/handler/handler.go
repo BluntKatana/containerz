@@ -76,7 +76,7 @@ func LikeMessage(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	// Return success response
-	return c.JSON(http.StatusCreated, data)
+	return c.JSON(http.StatusOK, data)
 }
 
 func UnlikeMessage(c echo.Context) error {
@@ -99,7 +99,7 @@ func UnlikeMessage(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	// Return success response
-	return c.JSON(http.StatusCreated, data)
+	return c.JSON(http.StatusOK, data)
 }
 
 func AddyMessage(c echo.Context) error {
@@ -122,5 +122,5 @@ func AddyMessage(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	// Return success response
-	return c.JSON(http.StatusCreated, data)
+	return c.JSON(http.StatusOK, data)
 }
