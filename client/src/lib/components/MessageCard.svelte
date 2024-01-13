@@ -6,6 +6,7 @@
   import { likedPostsStore } from '@/stores';
   import { get } from 'svelte/store';
   import type { Message } from '@/types';
+  import { toast } from 'svelte-sonner';
 
   export let message: Message;
 
@@ -50,6 +51,9 @@
 
     // Toggle the liked variable.
     liked = !liked;
+
+    // Show a toast message.
+    toast.success(`Post ${liked ? 'liked' : 'unliked'}`);
   }
 
   function y() {
@@ -61,6 +65,9 @@
     fetch(`${PUBLIC_API_URL}/messages/${message.id}/y`, {
       method: 'PUT',
     });
+
+    // Show a toast message.
+    toast.success(`Post 𝕐'd`);
   }
 </script>
 

@@ -110,7 +110,7 @@
     setTimeout(() => {
       buttonLoading = false;
       content = '';
-      toast('Message posted!');
+      toast.success('Message posted!', {description: "Thanks for sharing your thoughts!"});
     }, 250);
   }
 
@@ -191,7 +191,7 @@
   <Textarea
     id={TEXT_AREA_ID}
     bind:value={content}
-    placeholder="What's happening?"
+    placeholder="Why not share your thoughts?"
     cols={40}
     rows={3}
     class="resize-none border-none focus:border-none"

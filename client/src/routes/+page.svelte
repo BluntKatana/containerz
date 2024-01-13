@@ -54,6 +54,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Home / Y</title>
+</svelte:head>
+
 <div class="flex items-center flex-col h-screen w-full">
   <!-- Header containing Y logo and dark/light mode toggle -->
   <nav class="fixed w-full flex items-center justify-between px-4 top-4">
