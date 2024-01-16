@@ -4,7 +4,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
-	"db"
 	"handler"
 )
 
@@ -13,7 +12,7 @@ func main() {
 	e := echo.New()
 
 	// Middleware
-	// e.Use(middleware.Logger())
+	e.Use(middleware.Logger())
 	// e.Use(middleware.Recover())
 
 	// https://echo.labstack.com/docs/middleware/cors
@@ -32,6 +31,4 @@ func main() {
 
 	// Service start at port :1323
 	e.Logger.Fatal(e.Start(":1323"))
-
-	db.Ping()
 }

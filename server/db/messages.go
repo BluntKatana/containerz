@@ -19,6 +19,13 @@ type Message struct {
 
 // Retrieves all messages from the database and returns a Messages slice.
 func GetAllMessages() ([]Message, error) {
+
+	database, err := getDB()
+	if err != nil {
+		return nil, err
+	}
+	defer database.Close()
+
 	// An messages slice to hold data from returned rows.
 	var messages []Message
 
@@ -47,6 +54,13 @@ func GetAllMessages() ([]Message, error) {
 
 // Retrieves a message by id from the database and returns a Message struct.
 func GetMessageById(id int) (*Message, error) {
+
+	database, err := getDB()
+	if err != nil {
+		return nil, fmt.Errorf("connection_error")
+	}
+	defer database.Close()
+
 	row := database.QueryRow("SELECT id, username, content, likes, ys, created_at FROM messages WHERE id = ?", id)
 
 	var message Message
@@ -62,6 +76,12 @@ func GetMessageById(id int) (*Message, error) {
 
 // Add a message to the database and return the message struct
 func AddMessage(message *Message) (*Message, error) {
+	database, err := getDB()
+	if err != nil {
+		return nil, fmt.Errorf("connection_error")
+	}
+	defer database.Close()
+
 	stmt, err := database.Prepare("INSERT INTO messages (username, content, likes, ys) VALUES (?, ?, ?, ?)")
 	if err != nil {
 		return nil, err
@@ -87,6 +107,12 @@ func AddMessage(message *Message) (*Message, error) {
 
 // Update a message its likes, ys, or content
 func UpdateMessage(message *Message) (*Message, error) {
+	database, err := getDB()
+	if err != nil {
+		return nil, fmt.Errorf("connection_error")
+	}
+	defer database.Close()
+
 	stmt, err := database.Prepare("UPDATE messages SET likes = ?, ys = ?, content = ? WHERE id = ?")
 	if err != nil {
 		return nil, err
