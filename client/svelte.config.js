@@ -15,6 +15,11 @@ const config = {
     alias: {
       '@/*': './src/lib/*',
     },
+    env: {
+      // Change prefixes to account for kubernetes secrets
+      publicPrefix: "",
+      privatePrefix: "PRIVATE_",
+    }
   },
 };
 
