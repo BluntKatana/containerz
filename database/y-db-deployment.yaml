@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: y-db-deployment
+  labels:
+    app: y-db
+spec:
+  selector:
+    matchLabels:
+      app: y-db
+  template:
+    metadata:
+      labels:
+        app: y-db
+    spec:
+      containers:
+      - name: y-db-container
+        image: larooij/y-db:latest
+        ports:
+        - containerPort: 3306
+        envFrom:
+        - configMapRef:
+            name: y-db-config
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: y-db-secret
+              key: MYSQL_ROOT_PASSWORD

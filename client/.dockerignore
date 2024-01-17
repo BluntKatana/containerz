@@ -9,4 +9,4 @@ public
 .svelte-kit
 build
 dist
-*.env
+example.env

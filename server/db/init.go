@@ -2,11 +2,9 @@ package db
 
 import (
 	"database/sql"
-	"log"
 	"os"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
 // Information about the database connection.
@@ -15,18 +13,18 @@ import (
 // Initializes a MySQL database connection and returns a sql.DB object.
 func getDB() (*sql.DB, error) {
 
-	err := godotenv.Load("example.env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err := godotenv.Load("example.env")
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	// Capture connection properties.
 	cfg := mysql.Config{
-		User:   "root",
-		Passwd: "123456",
+		User:   os.Getenv("MYSQL_USER"),
+		Passwd: os.Getenv("MYSQL_PASSWORD"),
 		Net:    "tcp",
 		Addr:   os.Getenv("Y_DB_SERVICE_SERVICE_HOST") + ":" + os.Getenv("Y_DB_SERVICE_SERVICE_PORT"),
-		DBName: "chat",
+		DBName: os.Getenv("MYSQL_DATABASE"),
 	}
 	// Get a database handle.
 	sqlDB, err := sql.Open("mysql", cfg.FormatDSN())

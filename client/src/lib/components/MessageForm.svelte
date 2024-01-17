@@ -3,7 +3,7 @@
   import { Textarea } from '$lib/components/ui/textarea';
   import { Input } from '$lib/components/ui/input';
   import * as Card from '$lib/components/ui/card';
-  import { PUBLIC_API_URL } from '$env/static/public';
+  import { env } from '$env/dynamic/public';
   import { onMount } from 'svelte';
   import { Pencil1 } from 'radix-icons-svelte';
   import Skeleton from './ui/skeleton/skeleton.svelte';
@@ -81,7 +81,7 @@
     buttonLoading = true;
 
     // Send a request to the server to post the message.
-    await fetch(`${PUBLIC_API_URL}/messages`, {
+    await fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

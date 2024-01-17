@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import type { Message } from '$lib/types';
   import MessageCard from '$lib/components/MessageCard.svelte';
-  import { PUBLIC_API_URL } from '$env/static/public';
+  import { env } from '$env/dynamic/public';
   import MessageForm from '@/components/MessageForm.svelte';
   import Separator from '@/components/ui/separator/separator.svelte';
   import { likedPostsStore, messageStore } from '@/stores';
@@ -18,7 +18,7 @@
 
   onMount(async () => {
     // Get the messages from the server.
-    messages = await fetch(`${PUBLIC_API_URL}/messages`, {
+    messages = await fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages`, {
       headers: {
         accept: 'application/json',
         'User-agent': 'learning app',

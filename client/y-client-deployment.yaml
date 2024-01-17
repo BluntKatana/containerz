@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: y-client-deployment
+  labels:
+    app: y-client
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: y-client
+  template:
+    metadata:
+      labels:
+        app: y-client
+    spec:
+      containers:
+      - name: y-client-container
+        image: larooij/y-client:latest
+        ports:
+        - containerPort: 3000
