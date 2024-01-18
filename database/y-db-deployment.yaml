@@ -35,7 +35,12 @@ spec:
         volumeMounts:
           - name: y-db-init
             mountPath: /docker-entrypoint-initdb.d
+          - name: y-db-volume
+            mountPath: /var/lib/mysql
       volumes:
         - name: y-db-init
           configMap:
             name: y-db-init-config
+        - name: y-db-volume
+          persistentVolumeClaim:
+            claimName: y-db-pv-claim
