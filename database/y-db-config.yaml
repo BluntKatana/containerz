@@ -6,3 +6,4 @@ metadata:
     app: y-db
 data:
   MYSQL_DATABASE: chat
+  MYSQL_USER: admin

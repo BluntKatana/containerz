@@ -27,4 +27,4 @@ spec:
           valueFrom: 
             secretKeyRef:
               name: y-db-secret
-              key: MYSQL_ROOT_PASSWORD
+              key: MYSQL_PASSWORD

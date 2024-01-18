@@ -62,7 +62,7 @@
 
     // Send a request to the server to like/unlike the post.
     // Note that we do not await the response, so we can show optimistic UI updates.
-    fetch(`http://${Y_API_SERVICE_SERVICE_HOST}:${Y_API_SERVICE_SERVICE_PORT}/messages/${message.id}/y`, {
+    fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages/${message.id}/y`, {
       method: 'PUT',
     });
 

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: y-db-container
-        image: larooij/y-db:latest
+        image: mysql:8.2.0
         ports:
         - containerPort: 3306
         envFrom:
@@ -27,3 +27,15 @@ spec:
             secretKeyRef:
               name: y-db-secret
               key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: y-db-secret
+              key: MYSQL_PASSWORD
+        volumeMounts:
+          - name: y-db-init
+            mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: y-db-init
+          configMap:
+            name: y-db-init-config
