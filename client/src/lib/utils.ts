@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
+import { env } from '$env/dynamic/public';
 import type { TransitionConfig } from 'svelte/transition';
 
 export function cn(...inputs: ClassValue[]) {
@@ -54,3 +55,7 @@ export const flyAndScale = (
     easing: cubicOut,
   };
 };
+
+export const baseUrl = import.meta.env.DEV 
+  ? `http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}`
+  : 'https://api.y.com';

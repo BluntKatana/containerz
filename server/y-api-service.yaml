@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: y-api-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
-  - protocol: TCP
-    port: 1323
+  - port: 1323
     targetPort: 1323
   selector:
     app: y-api

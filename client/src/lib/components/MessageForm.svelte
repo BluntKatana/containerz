@@ -1,18 +1,17 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button';
-  import { Textarea } from '$lib/components/ui/textarea';
-  import { Input } from '$lib/components/ui/input';
   import * as Card from '$lib/components/ui/card';
-  import { env } from '$env/dynamic/public';
-  import { onMount } from 'svelte';
-  import { Pencil1 } from 'radix-icons-svelte';
-  import Skeleton from './ui/skeleton/skeleton.svelte';
+  import * as Dialog from '$lib/components/ui/dialog';
+  import { Input } from '$lib/components/ui/input';
+  import { Textarea } from '$lib/components/ui/textarea';
   import { messageStore } from '@/stores';
   import type { Message } from '@/types';
+  import { baseUrl } from '@/utils';
+  import { Pencil1, Reload } from 'radix-icons-svelte';
+  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
-  import { Reload } from 'radix-icons-svelte';
-  import * as Dialog from '$lib/components/ui/dialog';
   import { Label } from './ui/label';
+  import Skeleton from './ui/skeleton/skeleton.svelte';
 
   // Constant IDs to use later for determining what form is being submitted.
   const TEXT_AREA_ID = 'post_textarea';
@@ -81,7 +80,7 @@
     buttonLoading = true;
 
     // Send a request to the server to post the message.
-    await fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages`, {
+    await fetch(`${baseUrl}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

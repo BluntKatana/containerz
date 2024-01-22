@@ -1,12 +1,12 @@
 <script lang="ts">
   import * as Card from '$lib/components/ui/card';
-  import { HeartFilled, Heart } from 'radix-icons-svelte';
-  import { env } from '$env/dynamic/public';
-  import { onMount } from 'svelte';
   import { likedPostsStore } from '@/stores';
-  import { get } from 'svelte/store';
   import type { Message } from '@/types';
+  import { baseUrl } from '@/utils';
+  import { Heart, HeartFilled } from 'radix-icons-svelte';
+  import { onMount } from 'svelte';
   import { toast } from 'svelte-sonner';
+  import { get } from 'svelte/store';
 
   export let message: Message;
 
@@ -41,7 +41,7 @@
 
     // Send a request to the server to like/unlike the post.
     // Note that we do not await the response, so we can show optimistic UI updates.
-    fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages/${message.id}/${liked ? 'unlike' : 'like'}`, {
+    fetch(`${baseUrl}/messages/${message.id}/${liked ? 'unlike' : 'like'}`, {
       method: 'PUT',
     }).then((response) => {
       if (response.status !== 200) {
@@ -62,7 +62,7 @@
 
     // Send a request to the server to like/unlike the post.
     // Note that we do not await the response, so we can show optimistic UI updates.
-    fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages/${message.id}/y`, {
+    fetch(`${baseUrl}/messages/${message.id}/y`, {
       method: 'PUT',
     });
 

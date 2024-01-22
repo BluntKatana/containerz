@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import type { Message } from '$lib/types';
   import MessageCard from '$lib/components/MessageCard.svelte';
-  import { env } from '$env/dynamic/public';
+  import type { Message } from '$lib/types';
   import MessageForm from '@/components/MessageForm.svelte';
+  import { Button } from '@/components/ui/button';
   import Separator from '@/components/ui/separator/separator.svelte';
   import { likedPostsStore, messageStore } from '@/stores';
-  import { Button } from '@/components/ui/button';
-  import { Moon, Reload, Sun } from 'radix-icons-svelte';
+  import { baseUrl } from '@/utils';
   import { toggleMode } from 'mode-watcher';
+  import { Moon, Reload, Sun } from 'radix-icons-svelte';
+  import { onMount } from 'svelte';
+  import { env } from '$env/dynamic/public'
 
   // Store all the messages
   let messages: Message[] = [];
@@ -17,8 +18,10 @@
   let messagesLoading = true;
 
   onMount(async () => {
+
+    console.log(env.NODE_ENV);
     // Get the messages from the server.
-    messages = await fetch(`http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}/messages`, {
+    messages = await fetch(`${baseUrl}/messages`, {
       headers: {
         accept: 'application/json',
         'User-agent': 'learning app',
