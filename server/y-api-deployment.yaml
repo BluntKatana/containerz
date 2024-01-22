@@ -15,16 +15,16 @@ spec:
         app: y-api
     spec:
       containers:
-      - name: y-api-container
-        image: larooij/y-api:latest
-        ports:
-        - containerPort: 1323
-        envFrom:
-        - configMapRef:
-            name: y-db-config
-        env:
-        - name: MYSQL_PASSWORD
-          valueFrom: 
-            secretKeyRef:
-              name: y-db-secret
-              key: MYSQL_PASSWORD
+        - name: y-api-container
+          image: sandeyez/y-api:latest
+          ports:
+            - containerPort: 1323
+          envFrom:
+            - configMapRef:
+                name: y-db-config
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: y-db-secret
+                  key: MYSQL_PASSWORD

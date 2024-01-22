@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: y-client-container
-        image: larooij/y-client:latest
+        image: sandeyez/y-client:latest
         ports:
         - containerPort: 3000
