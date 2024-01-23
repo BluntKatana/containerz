@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: ca-issuer
-    cert-manager.io/common-name: y.com
-  name: y-client-ingress
+    cert-manager.io/common-name: VU-Containerization Group 30
+  name: y-ingress
 spec:
   rules:
   - host: y.com
@@ -17,7 +17,18 @@ spec:
             name: y-client-service
             port:
               number: 3000
+  - host: api.y.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: y-api-service
+            port:
+              number: 1323
   tls:
   - hosts: 
     - y.com
-    secretName: y-client-ingress-cert
+    - api.y.com
+    secretName: y-ingress-cert
