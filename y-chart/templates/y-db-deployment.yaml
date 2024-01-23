@@ -35,7 +35,7 @@ spec:
               key: MYSQL_PASSWORD
         volumeMounts:
           - name: y-db-init
-            mountPath: /dockker-entrypoint-initdb.d
+            mountPath: /docker-entrypoint-initdb.d
           - name: y-db-volume
             mountPath: /var/lib/mysql
       volumes:
