@@ -2,9 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: ca-issuer
-    cert-manager.io/common-name: VU-Containerization Group 30
+    cert-manager.io/issuer: ca-issuer
+    cert-manager.io/common-name: y.com
   name: y-ingress
+  namespace: {{ .Values.namespace }}
 spec:
   rules:
   - host: y.com
@@ -16,19 +17,15 @@ spec:
           service:
             name: y-client-service
             port:
-              number: 3000
-  - host: api.y.com
-    http:
-      paths:
+              number: {{ .Values.client.service.port }}
       - pathType: Prefix
-        path: /
+        path: /api
         backend:
           service:
             name: y-api-service
             port:
-              number: 1323
+              number: {{ .Values.api.service.port }}
   tls:
   - hosts: 
     - y.com
-    - api.y.com
     secretName: y-ingress-cert

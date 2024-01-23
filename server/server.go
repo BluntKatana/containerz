@@ -22,12 +22,12 @@ func main() {
 	}))
 
 	// Routes
-	e.GET("/messages", handler.GetAllMessages)
-	e.GET("/messages/:id", handler.GetMessage)
-	e.POST("/messages", handler.CreateMessage)
-	e.PUT("/messages/:id/like", handler.LikeMessage)
-	e.PUT("/messages/:id/unlike", handler.UnlikeMessage)
-	e.PUT("/messages/:id/y", handler.AddyMessage)
+	e.GET("/api/messages", handler.GetAllMessages)
+	e.GET("/api/messages/:id", handler.GetMessage)
+	e.POST("/api/messages", handler.CreateMessage)
+	e.PUT("/api/messages/:id/like", handler.LikeMessage)
+	e.PUT("/api/messages/:id/unlike", handler.UnlikeMessage)
+	e.PUT("/api/messages/:id/y", handler.AddyMessage)
 
 	// Service start at port :1323
 	e.Logger.Fatal(e.Start(":1323"))

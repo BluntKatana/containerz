@@ -2,8 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: y-db-init-config
+  namespace: {{ .Values.namespace }}
   labels:
-    app: y-db
+    app: {{ .Values.db.appName }}
 data:
   initdb.sql: |
     CREATE database IF NOT EXISTS chat;

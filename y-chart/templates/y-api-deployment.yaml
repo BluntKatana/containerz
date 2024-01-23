@@ -2,21 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: y-api-deployment
+  namespace: {{ .Values.namespace }}
   labels:
-    app: y-api
+    app: {{ .Values.api.appName }}
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: y-api
+      app: {{ .Values.api.appName }}
   template:
     metadata:
       labels:
-        app: y-api
+        app: {{ .Values.api.appName }}
     spec:
       containers:
         - name: y-api-container
-          image: larooij/y-api:latest
+          image: "{{ .Values.api.image.name }}:{{ .Values.api.image.tag }}"
           ports:
             - containerPort: 1323
           envFrom:
