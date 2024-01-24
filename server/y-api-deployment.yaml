@@ -16,6 +16,11 @@ spec:
     spec:
       containers:
         - name: y-api-container
+          readinessProbe:
+            httpGet:
+              path: /api/messages
+              port: 1323
+            successThreshold: 3
           image: larooij/y-api:latest
           ports:
             - containerPort: 1323

@@ -7,24 +7,28 @@ metadata:
   name: y-ingress
   namespace: {{ .Values.namespace }}
 spec:
+  defaultBackend:
+      service:
+        name: y-client-service
+        port:
+          number: {{ .Values.client.service.port }}
   rules:
-  - host: y.com
-    http:
-      paths:
-      - pathType: Prefix
-        path: /
-        backend:
-          service:
-            name: y-client-service
-            port:
-              number: {{ .Values.client.service.port }}
-      - pathType: Prefix
-        path: /api
-        backend:
-          service:
-            name: y-api-service
-            port:
-              number: {{ .Values.api.service.port }}
+    - http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: y-client-service
+              port:
+                number: {{ .Values.client.service.port }}
+        - pathType: Prefix
+          path: /api
+          backend:
+            service:
+              name: y-api-service
+              port:
+                number: {{ .Values.api.service.port }}
   tls:
   - hosts: 
     - y.com

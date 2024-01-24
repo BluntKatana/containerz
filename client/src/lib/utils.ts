@@ -58,4 +58,4 @@ export const flyAndScale = (
 
 export const baseUrl = import.meta.env.DEV 
   ? `http://${env.Y_API_SERVICE_SERVICE_HOST}:${env.Y_API_SERVICE_SERVICE_PORT}`
-  : 'https://y.com/api';
+  : '/api';

@@ -1,5 +1,4 @@
 namespace: default
-issuer: ca-issuer-le
 
 db:
   appName: y-db
