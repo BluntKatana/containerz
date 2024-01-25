@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: y-managed-cert
+spec:
+  domains:
+    - y.florisbos.com
