@@ -12,6 +12,4 @@ COPY handler /usr/local/go/src/handler
 COPY server.go ./
 RUN go build -v -o server
 
-EXPOSE 1323
-
 CMD ["./server"]

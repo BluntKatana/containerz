@@ -4,9 +4,10 @@ metadata:
   name: y-client-service
   namespace: {{ .Values.namespace }}
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: {{ .Values.client.service.port }}
     targetPort: {{ .Values.client.service.port }}
+    protocol: TCP
   selector:
     app: {{ .Values.client.appName }}

@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.client.appName }}
+    version: {{ .Values.client.appVersion }}
 spec:
   replicas: 3
   selector:
@@ -19,4 +20,4 @@ spec:
       - name: y-client-container
         image: "{{ .Values.client.image.name }}:{{ .Values.client.image.tag }}"
         ports:
-        - containerPort: 3000
+        - containerPort: {{ .Values.client.service.port }}

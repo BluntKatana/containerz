@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.db.appName }}
+    version: {{ .Values.db.appVersion }}
 spec:
   selector:
     matchLabels:
@@ -18,7 +19,7 @@ spec:
       - name: y-db-container
         image: "{{ .Values.db.image.name }}:{{ .Values.db.image.tag }}"
         ports:
-        - containerPort: 3306
+        - containerPort: {{ .Values.db.service.port }}
         envFrom:
         - configMapRef:
             name: y-db-config
