@@ -24,6 +24,10 @@ spec:
               path: /api/readiness
               port: {{ .Values.api.service.port }}
             successThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/readiness
+              port: {{ .Values.api.service.port }}
           image: "{{ .Values.api.image.name }}:{{ .Values.api.image.tag }}"
           imagePullPolicy: Always
           ports:

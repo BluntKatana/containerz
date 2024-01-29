@@ -18,6 +18,16 @@ spec:
     spec:
       containers:
       - name: y-client-container
+        # Readiness probe to check if the api is ready to receive traffic
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.client.service.port }}
+          successThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.client.service.port }}
         image: "{{ .Values.client.image.name }}:{{ .Values.client.image.tag }}"
         ports:
         - containerPort: {{ .Values.client.service.port }}

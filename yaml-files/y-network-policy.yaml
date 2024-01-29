@@ -13,21 +13,17 @@ spec:
         matchLabels:
           app: y-api
 ---
-# Policy to isolate the project's namespace, nothing in or out
+# Policy to isolate the project's namespace, nothing out to other (example: prod) namespaces
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: y-network-policy-namespace
-  namespace: y-prod
+  namespace: y-dev
 spec:
   policyTypes:
-  - Ingress
   - Egress
   podSelector:
     matchLabels:
-  ingress:
-  - from:
-    - podSelector: {}
   egress:
   - to:
     - podSelector: {}
@@ -37,7 +33,7 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: y-network-policy-internet
-  namespace: y-prod
+  namespace: y-dev
 spec:
   podSelector:
     matchLabels:

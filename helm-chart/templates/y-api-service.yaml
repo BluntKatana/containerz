@@ -4,7 +4,7 @@ metadata:
   name: y-api-service
   namespace: {{ .Values.namespace }}
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - port: {{ .Values.api.service.port }}
     targetPort: {{ .Values.api.service.port }}

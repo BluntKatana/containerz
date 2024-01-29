@@ -22,22 +22,18 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   policyTypes:
-  - Ingress
   - Egress
   podSelector:
     matchLabels:
-  ingress:
-  - from:
-    - podSelector: {}
   egress:
   - to:
     - podSelector: {}
 ---
-# Policy to block all egress traffic from the y-client
+# Policy to block all egress traffic from the y-client, also inner-namespace
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: y-network-policy-internet
+  name: y-network-policy-clientegress
   namespace: {{ .Values.namespace }}
 spec:
   podSelector:
