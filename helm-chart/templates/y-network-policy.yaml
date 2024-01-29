@@ -3,22 +3,23 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: y-network-policy-db
+  namespace:  {{ .Values.namespace }}
 spec:
   podSelector:
     matchLabels:
-      app: y-db
+      app: {{ .Values.db.appName }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: y-api
+          app: {{ .Values.api.appName }}
 ---
 # Policy to isolate the project's namespace, nothing in or out
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: y-network-policy-namespace
-  namespace: y-prod
+  namespace: {{ .Values.namespace }}
 spec:
   policyTypes:
   - Ingress
@@ -37,10 +38,10 @@ kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
   name: y-network-policy-internet
-  namespace: y-prod
+  namespace: {{ .Values.namespace }}
 spec:
   podSelector:
     matchLabels:
-      app: y-client
+      app: {{ .Values.client.appName }}
   policyTypes:
   - Egress
