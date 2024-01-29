@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: y-client-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.client.appName }}
+    version: {{ .Values.client.appVersion }}
+spec:
+  replicas: {{ .Values.client.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.client.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.client.appName }}
+    spec:
+      containers:
+      - name: y-client-container
+        image: "{{ .Values.client.image.name }}:{{ .Values.client.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.client.service.port }}

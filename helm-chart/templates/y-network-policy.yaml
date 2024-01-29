@@ -1,0 +1,47 @@
+# Policy to only give the y-api access to the y-db
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: y-network-policy-db
+  namespace:  {{ .Values.namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.db.appName }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: {{ .Values.api.appName }}
+---
+# Policy to isolate the project's namespace, nothing in or out
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: y-network-policy-namespace
+  namespace: {{ .Values.namespace }}
+spec:
+  policyTypes:
+  - Ingress
+  - Egress
+  podSelector:
+    matchLabels:
+  ingress:
+  - from:
+    - podSelector: {}
+  egress:
+  - to:
+    - podSelector: {}
+---
+# Policy to block all egress traffic from the y-client
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: y-network-policy-internet
+  namespace: {{ .Values.namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.client.appName }}
+  policyTypes:
+  - Egress

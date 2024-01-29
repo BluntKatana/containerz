@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: ca-issuer
+    cert-manager.io/common-name: y.florisbos.com
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.gcloudComputeAddressName}}
+  name: y-ingress
+  namespace: {{ .Values.namespace }}
+spec:
+  ingressClassName: "gce"
+  defaultBackend:
+      service:
+        name: y-client-service
+        port:
+          number: {{ .Values.client.service.port }}
+  rules:
+    - http:
+        paths:
+        - pathType: Prefix
+          path: /
+          backend:
+            service:
+              name: y-client-service
+              port:
+                number: {{ .Values.client.service.port }}
+        - pathType: Prefix
+          path: /api
+          backend:
+            service:
+              name: y-api-service
+              port:
+                number: {{ .Values.api.service.port }}
+  tls:
+  - hosts: 
+    - y.florisbos.com
+    - y.com
+    secretName: y-ingress-cert

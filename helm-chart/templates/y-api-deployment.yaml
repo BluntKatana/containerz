@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: y-api-deployment
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.api.appName }}
+    version: {{ .Values.api.appVersion }}
+spec:
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.api.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.api.appName }}
+    spec:
+      containers:
+        - name: y-api-container
+          # Readiness probe to check if the api is ready to receive traffic
+          readinessProbe:
+            httpGet:
+              path: /api/readiness
+              port: {{ .Values.api.service.port }}
+            successThreshold: 3
+          image: "{{ .Values.api.image.name }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.api.service.port }}
+          envFrom:
+            - configMapRef:
+                name: y-db-config
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: y-db-secret
+                  key: MYSQL_PASSWORD
