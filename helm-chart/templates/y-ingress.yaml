@@ -4,11 +4,11 @@ metadata:
   annotations:
     cert-manager.io/issuer: ca-issuer
     cert-manager.io/common-name: y.florisbos.com
-    # kubernetes.io/ingress.global-static-ip-name: {{ .Values.gcloudComputeAddressName}}
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.gcloudComputeAddressName}}
   name: y-ingress
   namespace: {{ .Values.namespace }}
 spec:
-  # ingressClassName: "gce"
+  ingressClassName: "gce"
   defaultBackend:
       service:
         name: y-client-service

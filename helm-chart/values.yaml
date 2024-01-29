@@ -1,4 +1,4 @@
-namespace: y-prod
+namespace: y-dev
 gcloudComputeAddressName: y-ingress-ip
 
 db:
@@ -13,7 +13,7 @@ db:
 api:
   appName: y-api
   appVersion: "1.0.0"
-  replicas: 3
+  replicas: 1
   image:
     name: larooij/y-api
     tag: "1.0.0"
@@ -23,12 +23,9 @@ api:
 client:
   appName: y-client
   appVersion: "1.0.0"
-  replicas: 3
+  replicas: 1
   image:
     name: larooij/y-client
     tag: "1.0.0"
   service:
     port: 3000
-
-cert-manager:
-  namespace: cert-manager

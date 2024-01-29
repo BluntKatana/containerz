@@ -1,0 +1,5 @@
+gcloud container clusters get-credentials y-containerization --region=europe-west1-b
+gcloud compute addresses create y-ingress-ip --global
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.yaml
+kubectl create namespace y-dev && kubectl create namespace y-prod
+kubectl apply -f yaml-files/y-db-storage.yaml -n y-dev
