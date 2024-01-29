@@ -162,3 +162,7 @@ func AddyMessage(c echo.Context) error {
 	// Return success response
 	return c.JSON(http.StatusOK, data)
 }
+
+func Readiness(c echo.Context) error {
+	return c.JSON(http.StatusOK, "OK")
+}

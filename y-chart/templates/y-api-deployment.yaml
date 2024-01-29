@@ -18,12 +18,14 @@ spec:
     spec:
       containers:
         - name: y-api-container
+          # Readiness probe to check if the api is ready to receive traffic
           readinessProbe:
             httpGet:
-              path: /api/messages
+              path: /api/readiness
               port: {{ .Values.api.service.port }}
             successThreshold: 3
           image: "{{ .Values.api.image.name }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.api.service.port }}
           envFrom:

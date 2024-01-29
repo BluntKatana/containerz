@@ -29,6 +29,8 @@ func main() {
 	e.PUT("/api/messages/:id/unlike", handler.UnlikeMessage)
 	e.PUT("/api/messages/:id/y", handler.AddyMessage)
 
+	e.GET("/api/readiness", handler.Readiness)
+
 	// Service start at port :1323
 	e.Logger.Fatal(e.Start(":1323"))
 }

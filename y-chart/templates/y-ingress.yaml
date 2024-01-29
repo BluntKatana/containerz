@@ -4,12 +4,11 @@ metadata:
   annotations:
     cert-manager.io/issuer: ca-issuer
     cert-manager.io/common-name: y.florisbos.com
-    kubernetes.io/ingress.class: "gce"
-    networking.gke.io/managed-certificates: managed-cert
     # kubernetes.io/ingress.global-static-ip-name: {{ .Values.gcloudComputeAddressName}}
   name: y-ingress
   namespace: {{ .Values.namespace }}
 spec:
+  # ingressClassName: "gce"
   defaultBackend:
       service:
         name: y-client-service
@@ -35,4 +34,5 @@ spec:
   tls:
   - hosts: 
     - y.florisbos.com
+    - y.com
     secretName: y-ingress-cert
