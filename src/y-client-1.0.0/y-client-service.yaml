@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: y-api-service-other
+  name: y-client-service
 spec:
   type: LoadBalancer
   ports:
-  - port: 1323
-    targetPort: 1323
+  - port: 3000
+    targetPort: 3000
   selector:
-    app: y-api-other
+    app: y-client

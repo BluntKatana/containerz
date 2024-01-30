@@ -33,5 +33,4 @@ spec:
   tls:
   - hosts: 
     - y.florisbos.com
-    - y.com
     secretName: y-ingress-cert

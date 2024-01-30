@@ -5,3 +5,49 @@ kubectl create namespace y-dev && kubectl create namespace y-prod
 kubectl apply -f yaml-files/y-db-storage.yaml -n y-dev
 
 git clone https://github.com/BluntKatana/containerz.git
+
+helm status y-dev
+kubectl get pods -n y-dev
+kubectl get svc -n y-dev
+kubectl describe deployment y-db-deployment -n y-dev
+
+
+kubectl scale deployment y-api-deployment --replicas=3 -n y-dev
+kubectl get pods -n y-dev -w
+kubectl describe deployment y-api-deployment -n y-dev
+kubectl autoscale deployment y-client-deployment --min 3 --max 5 --cpu-percent 60 -n y-dev
+kubectl describe hpa y-client-deployment -n y-dev
+kubectl get pods -n y-dev
+
+docker build -t larooij/y-client:1.1.0 .
+docker push larooij/y-client:1.1.0
+
+helm upgrade y-dev ./helm-chart
+kubectl get pods -n y-dev
+kubectl rollout status deployment/y-client-deployment -n y-dev
+kubectl describe deployment y-client-deployment -n y-dev
+
+kubectl apply -f yaml-files/y-client-deployment-v2.yaml -n y-dev
+kubectl get pods -n y-dev
+
+kubectl scale deployment y-client-deployment-v2 --replicas=3 -n y-dev
+kubectl delete deployment y-client-deployment -n y-dev
+
+kubectl auth can-i get pods -n y-dev --as=system:serviceaccount:default:y-developer
+kubectl auth can-i delete pods -n y-dev --as=system:serviceaccount:default:y-developer
+kubectl auth can-i get services -n y-prod --as=system:serviceaccount:default:y-developer
+
+kubectl auth can-i list pods -n y-dev --as=system:serviceaccount:default:y-product-owner
+kubectl auth can-i list pods -n y-prod --as=system:serviceaccount:default:y-product-owner
+kubectl auth can-i delete pods -n y-prod --as=system:serviceaccount:default:y-product-owner
+
+kubectl auth can-i create pods -n y-prod --as=system:serviceaccount:default:y-release-manager
+kubectl auth can-i get pods -n y-dev --as=system:serviceaccount:default:y-release-manager
+kubectl auth can-i delete pods -n y-dev --as=system:serviceaccount:default:y-release-manager
+
+kubectl exec -it y-api-deployment-845b47c589-5qnqx -n y-dev -- /bin/bash
+curl localhost:1323/api/messages
+kubectl exec -it y-api-deployment-other-69b8b48648-vrx52 -n y-dev -- /bin/bash
+
+kubectl exec -it y-client-deployment-57f9887c68-462bs -n y-prod -- sh
+kubectl exec -it y-client-deployment-594bf966b-7j5mv -n y-dev -- sh
