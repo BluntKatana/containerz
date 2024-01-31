@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: y-api-deployment
+  namespace: default
+  labels:
+    app: y-api
+    version: "1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: y-api
+  template:
+    metadata:
+      labels:
+        app: y-api
+    spec:
+      containers:
+        - name: y-api-container
+          # Readiness probe to check if the api is ready to receive traffic
+          readinessProbe:
+            httpGet:
+              path: /api/readiness
+              port: 1323
+            successThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/readiness
+              port: 1323
+          image: "larooij/y-api:1.0.0"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1323
+          envFrom:
+            - configMapRef:
+                name: y-db-config
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: y-db-secret
+                  key: MYSQL_PASSWORD

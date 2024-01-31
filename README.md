@@ -8,6 +8,10 @@ The following technologies are used:
   - Web Framework: [echo](https://echo.labstack.com/)
 - ./database: [mysql](https://www.mysql.com/)
 
+## Project overview
+
+TODO!
+
 ## Installation
 
 ### Prerequisites
@@ -37,3 +41,47 @@ As the rolling update is the default strategy for Kubernetes deployments, we can
 
 ### Canary release
 This one, we have to do manually. We create a new [deployment yaml file](yaml-files/y-client-deployment-v2.yaml). This one uses the new image tag, but uses the **same app label**, so the service will also distribute traffic to these pods. We apply this file by running `kubectl apply -f yaml-files/y-client-deployment-v2.yaml`. After verifying that the update was successful, we can scale the new (canary) deployment to 3 replicas and delete the old deployment. Now, the whole application is updated to the new version of the client.
+
+## Repo overview
+```
+/
+├── README.md
+├── commands.txt                              # list of commands used in the video
+├── src
+│   ├── y-api-1.0.0                           # source code for the API (version 1.0.0)
+│   ├── y-api-1.1.0                           # source code for the API (version 1.1.0)
+│   ├── y-client                              # source code for the client (version 1.0.0)         
+├── helm-chart                                # helm chart for the application
+│   ├── Chart.yaml
+│   ├── values.yaml                           # values for the helm chart  
+│   └── templates                             # templates for the helm chart
+│     ├── y-api-deployment.yaml               # deployment for the API
+│     ├── y-api-service.yaml                  # service for the API
+│     ├── y-ca-issuer.yaml                    # cert issuer for the application
+│     ├── y-client-deployment.yaml            # deployment for the client
+│     ├── y-client-service.yaml               # service for the client
+│     ├── y-db-config.yaml                    # configmap for the database
+│     ├── y-db-deployment.yaml                # deployment for the database
+│     ├── y-db-init-config.yaml               # configmap for the database init script
+│     ├── y-db-secret.yaml                    # secret for the database
+│     ├── y-db-service.yaml                   # service for the database
+│     ├── y-db-storage.yaml                   # persistent volume claim for the database
+│     ├── y-ingress.yaml                      # ingress for the application
+│     ├── y-issuer.yaml                       # issuer for the application
+│     ├── y-network-policy.yaml               # network policy for the application
+│     └── y-rbac.yaml                         # rbac for the application
+├── yaml
+    ├── video-yaml-files                      # extra yaml files used in the video
+    │   ├── y-api-deployment-other.yaml       # api deployment with other label for network policy testing
+    │   ├── y-client-deployment-v2.yaml       # deployment for the client (version 1.1.0) for upgrading
+    │   └── y-db-storage.yaml                 # persistent volume claim for the database
+    └── helm-raw-yaml                         # all yaml files used in helm chart without values
+```
+
+
+### Dockerfiles
+All Dockerfiles used are in the [src](src/) folder.
+
+- [y-api](src/y-api/Dockerfile)
+- [y-client-1.0.0](src/y-client-1.0.0/Dockerfile)
+- [y-client-1.1.0](src/y-client-1.1.0/Dockerfile)

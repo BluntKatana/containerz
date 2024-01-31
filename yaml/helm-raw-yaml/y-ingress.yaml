@@ -2,9 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: ca-issuer
-    cert-manager.io/common-name: y.com
+    cert-manager.io/issuer: ca-issuer
+    cert-manager.io/common-name: y.florisbos.com
   name: y-ingress
+  namespace: default
 spec:
   defaultBackend:
       service:
@@ -30,5 +31,5 @@ spec:
                 number: 1323
   tls:
   - hosts: 
-    - y.com
+    - y.florisbos.com
     secretName: y-ingress-cert

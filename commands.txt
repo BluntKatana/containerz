@@ -1,17 +1,19 @@
+# init commands!
 gcloud container clusters get-credentials y-containerization --region=europe-west1-b
 gcloud compute addresses create y-ingress-ip --global
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.yaml
 kubectl create namespace y-dev && kubectl create namespace y-prod
+git clone https://github.com/BluntKatana/containerz.git
 kubectl apply -f yaml-files/y-db-storage.yaml -n y-dev
 
-git clone https://github.com/BluntKatana/containerz.git
-
+# install commands!
+helm install y-dev ./helm-chart
 helm status y-dev
 kubectl get pods -n y-dev
 kubectl get svc -n y-dev
 kubectl describe deployment y-db-deployment -n y-dev
 
-
+# scale commands!
 kubectl scale deployment y-api-deployment --replicas=3 -n y-dev
 kubectl get pods -n y-dev -w
 kubectl describe deployment y-api-deployment -n y-dev
@@ -19,35 +21,36 @@ kubectl autoscale deployment y-client-deployment --min 3 --max 5 --cpu-percent 6
 kubectl describe hpa y-client-deployment -n y-dev
 kubectl get pods -n y-dev
 
+# build new version commands!
 docker build -t larooij/y-client:1.1.0 .
 docker push larooij/y-client:1.1.0
 
+# upgrade commands!
 helm upgrade y-dev ./helm-chart
 kubectl get pods -n y-dev
 kubectl rollout status deployment/y-client-deployment -n y-dev
 kubectl describe deployment y-client-deployment -n y-dev
 
+# canary deployment commands!
 kubectl apply -f yaml-files/y-client-deployment-v2.yaml -n y-dev
 kubectl get pods -n y-dev
-
 kubectl scale deployment y-client-deployment-v2 --replicas=3 -n y-dev
 kubectl delete deployment y-client-deployment -n y-dev
 
+# rbac verification commands!
 kubectl auth can-i get pods -n y-dev --as=system:serviceaccount:default:y-developer
 kubectl auth can-i delete pods -n y-dev --as=system:serviceaccount:default:y-developer
 kubectl auth can-i get services -n y-prod --as=system:serviceaccount:default:y-developer
-
 kubectl auth can-i list pods -n y-dev --as=system:serviceaccount:default:y-product-owner
 kubectl auth can-i list pods -n y-prod --as=system:serviceaccount:default:y-product-owner
 kubectl auth can-i delete pods -n y-prod --as=system:serviceaccount:default:y-product-owner
-
 kubectl auth can-i create pods -n y-prod --as=system:serviceaccount:default:y-release-manager
 kubectl auth can-i get pods -n y-dev --as=system:serviceaccount:default:y-release-manager
 kubectl auth can-i delete pods -n y-dev --as=system:serviceaccount:default:y-release-manager
 
+# commands to check network policies!
 kubectl exec -it y-api-deployment-845b47c589-5qnqx -n y-dev -- /bin/bash
 curl localhost:1323/api/messages
 kubectl exec -it y-api-deployment-other-69b8b48648-vrx52 -n y-dev -- /bin/bash
-
 kubectl exec -it y-client-deployment-57f9887c68-462bs -n y-prod -- sh
 kubectl exec -it y-client-deployment-594bf966b-7j5mv -n y-dev -- sh
