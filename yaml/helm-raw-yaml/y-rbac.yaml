@@ -1,9 +1,20 @@
-# service account
+# service accounts
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: y-product-owner
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: y-developer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: y-release-manager
+---
+# Roles for the service accounts
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -13,41 +24,27 @@ rules:
   resources: ["*"]
   verbs: ["get", "watch", "list", "describe"]
 ---
-
-# service account
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: y-developer
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: y-development-all
   namespace: y-dev
 rules:
-  - apiGroups: [""] # "" indicates the core API group
+  - apiGroups: [""] 
     resources: ["*"]
     verbs: ["*"]
-
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: y-release-manager
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: y-prodction-all
+  name: y-production-writer
   namespace: y-prod
 rules:
-  - apiGroups: [""] # "" indicates the core API group
+  - apiGroups: [""] 
     resources: ["*"]
-    verbs: ["*"]
+    verbs: ["create", "update", "patch", "delete"]
 ---
-
-# Account for the y-global-reader role
+# Bindings for the service accounts
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -72,7 +69,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: y-developer
-  namespace: y-dev
+  namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -81,13 +78,13 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: y-prodction-all-binding
+  name: y-production-all-binding
   namespace: y-prod
 subjects:
 - kind: ServiceAccount
   name: y-release-manager
-  namespace: y-prod
+  namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: y-prodction-all
+  name: y-production-writer

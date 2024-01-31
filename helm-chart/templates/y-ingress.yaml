@@ -8,7 +8,6 @@ metadata:
   name: y-ingress
   namespace: {{ .Values.namespace }}
 spec:
-  ingressClassName: "gce"
   defaultBackend:
       service:
         name: y-client-service
@@ -34,5 +33,4 @@ spec:
   tls:
   - hosts: 
     - y.florisbos.com
-    - y.com
     secretName: y-ingress-cert

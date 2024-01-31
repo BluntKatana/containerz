@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: y-client-deployment-v2
+  namespace: y-dev
+  labels:
+    app: y-client
+    version: "1.1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: y-client
+  template:
+    metadata:
+      labels:
+        app: y-client
+    spec:
+      containers:
+      - name: y-client-container
+        image: larooij/y-client:1.1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000

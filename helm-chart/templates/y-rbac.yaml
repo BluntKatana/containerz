@@ -69,7 +69,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: y-developer
-  namespace: y-dev
+  namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -78,12 +78,12 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: y-prodction-all-binding
+  name: y-production-all-binding
   namespace: y-prod
 subjects:
 - kind: ServiceAccount
   name: y-release-manager
-  namespace: y-prod
+  namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
