@@ -1,16 +1,37 @@
 # Containerz - 𝕐
 Practical assignment for the course: Software Containerization.
 
-The following technologies are used:
-- ./client: [svelte](https://svelte.dev/)
-  - UI library: [shadcn-svelte](https://www.shadcn-svelte.com/)
-- ./server: [golang](https://go.dev/)
-  - Web Framework: [echo](https://echo.labstack.com/)
-- ./database: [mysql](https://www.mysql.com/)
 
 ## Project overview
 
-TODO!
+This project provides a simple web application with a client, API and database. It is named 'Y', as a parody on 'X', the new Twitter. The client provides the user with a simple Web UI to read and post messages.
+
+![screenshot](img/y-screenshot.png)
+
+The client comunicates with the API to retrieve and post messages. The API is responsible for handling the POST, PUT and GET messages and interacting with the database. The database is a simple MySQL database. The picture below shows the connections between the different components.
+
+![connections](img/connections.png)
+
+The following technologies are used for building the application:
+- Client: [svelte](https://svelte.dev/)
+  - UI library: [shadcn-svelte](https://www.shadcn-svelte.com/)
+- API server: [golang](https://go.dev/)
+  - Web Framework: [echo](https://echo.labstack.com/)
+- Database: [mysql](https://www.mysql.com/)
+
+The application is containerized using Docker and deployed to a Kubernetes cluster using Helm. For the assignment, we deployed the application to a Google Kubernetes Engine (GKE) cluster. The service is publicly available through https://y.maiklarooij.nl (as long as the GKE cluster is running on the credits). 
+
+### Cluster overview
+
+To gain an understanding of the cluster, we present the following chart:
+
+![overview](img/overview.png)
+
+It shows that the API and client deployments both have 3 replicas running on different nodes (total 3 nodes). The database is not replicated. The API and client services are exposed through an ingress, which is secured using a certificate from our own created Certificate Authority (CA). The database is only accessible from the API pods.
+
+The different Kubernetes objects and their relation to each other are further shown in the following diagram:
+
+![flow](img/flow-diagram.png)
 
 ## Installation
 
@@ -78,6 +99,9 @@ This one, we have to do manually. We create a new [deployment yaml file](yaml-fi
     └── helm-raw-yaml                         # all yaml files used in helm chart without values
 ```
 
+The following diagram shows the structure of the used yaml files:
+
+![yaml-structure](img/file-structure.png)
 
 ### Dockerfiles
 All Dockerfiles used are in the [src](src/) folder.
