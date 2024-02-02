@@ -1,6 +1,23 @@
 # Containerz - 𝕐
 Practical assignment for the course: Software Containerization.
 
+Authors: Sander van Werkhoven, Floris Bos, Maik Larooij (group 30)
+
+# Contents
+- [Project overview](#project-overview)
+  - [Cluster overview](#cluster-overview)
+- [Installation](#installation)
+  - [Prequisites](#prerequisites)
+  - [Install](#install)
+  - [Scaling](#scaling)
+  - [Uninstall](#uninstall)
+  - [Video commands](#video-commands)
+- [Upgrading](#upgrading)
+  - [Rolling update](#rolling-update)
+  - [Canary release](#canary-release)
+- [Repo overview](#repo-overview)
+  - [YAML files](#yaml-files)
+  - [Dockerfiles](#dockerfiles)
 
 ## Project overview
 
@@ -52,6 +69,10 @@ Examples:
 ### Uninstall
 Run `helm uninstall y-dev --namespace y-dev` to uninstall the application.
 
+
+### Video commands
+All commands used in the video are listed in the [commands.txt](commands.txt) file.
+
 ## Upgrading
 Run `helm upgrade y-dev ./helm-chart --namespace y-dev` to upgrade the application after making changes to the chart. In the video, we show upgrading a part of the application using a rolling update and the other part using a canary release. We will update the y-client deployment to [version 1.1.0](src/y-client-1.1.0/), which includes our mascot [Gopher](src/y-client-1.1.0/src/lib/assets/go-gopher.svg) to show in the bottom-left corner of the application.
 
@@ -99,9 +120,12 @@ This one, we have to do manually. We create a new [deployment yaml file](yaml-fi
     └── helm-raw-yaml                         # all yaml files used in helm chart without values
 ```
 
+### YAML files
 The following diagram shows the structure of the used yaml files:
 
 ![yaml-structure](img/file-structure.png)
+
+The yaml files for Helm are found in the [helm-chart/templates](helm-chart/templates) folder. The raw yaml files used in the Helm chart are found in the [yaml](yaml/helm-raw-yaml) folder. The extra yaml files used in the video are found in the [video-yaml-files](yaml/video-yaml-files/) folder.
 
 ### Dockerfiles
 All Dockerfiles used are in the [src](src/) folder.
